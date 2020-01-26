@@ -8,6 +8,6 @@ import java.util.List;
 public interface CarsService {
     HashMap<Long, Cars> getAll();
     Cars getById(Long id);
-    Cars add(Cars car);
+    void add(Cars car);
     void removeById(Long id);
 }

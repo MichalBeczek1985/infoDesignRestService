@@ -24,8 +24,8 @@ DataService dataService;
     }
 
     @Override
-    public Cars add(Cars car) {
-        return dataService.add(car);
+    public void add(Cars car) {
+         dataService.add(car);
     }
 
     @Override

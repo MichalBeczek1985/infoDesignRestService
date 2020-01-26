@@ -1,13 +1,10 @@
 package pl.michal.motorest.domain;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
-
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

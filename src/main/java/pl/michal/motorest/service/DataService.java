@@ -13,30 +13,24 @@ public class DataService{
     HashMap<Long,Cars> carsMap = new HashMap<>();
 
     private void ReadData(){
-        File file = null;
         try {
-            file = new ClassPathResource(FILE_NAME).getFile();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(file), "UTF8"));
+            File file = getFile();
+            BufferedReader in = getUtf8BuffReader(file);
             String line;
             in.readLine();
             while ((line = in.readLine()) != null) {
                 if (line.trim().length() > 0) {
                     String[] personCsv = line.split(",");
-                    Cars car = new Cars();
-                    car.setId(Long.valueOf(personCsv[0]));
-                    car.setNazwa(personCsv[1]);
-                    car.setDataZakupu(personCsv[2]);
-                    car.setKolor(personCsv[3]);
+                    Cars car = Cars.builder().Id(Long.valueOf(personCsv[0]))
+                            .Nazwa(personCsv[1])
+                            .dataZakupu(personCsv[2])
+                            .kolor(personCsv[3]).build();
                     carsMap.put(car.getId(),car);
                 }}
             } catch(IOException e){
                 System.out.println("brak pliku z danymi");
             }
         }
-
-
 
     public HashMap<Long, Cars> getAll() {
         ReadData();
@@ -50,7 +44,7 @@ public class DataService{
     }
 
 
-    public Cars add(Cars car) {
+    public void add(Cars car) {
         ReadData();
         Cars cars = carsMap.get(car.getId());
         if (cars==null){
@@ -60,13 +54,12 @@ public class DataService{
             removeById(cars.getId());
             saveCar(car);
         }
-        return car;
     }
 
     private void saveCar(Cars car) {
         String s = car.toString();
         try {
-            File file = new ClassPathResource(FILE_NAME).getFile();
+            File file = getFile();
             FileWriter writer = new FileWriter(file,true);
             writer.append("\n\n");
             writer.append(s);
@@ -83,10 +76,8 @@ public class DataService{
         if(cars!=null){
             carsMap.remove(cars.getId());
             try {
-            File file = new ClassPathResource(FILE_NAME).getFile();
-            BufferedReader in = new BufferedReader(
-                        new InputStreamReader(
-                                new FileInputStream(file), "UTF8"));
+            File file = getFile();
+            BufferedReader in = getUtf8BuffReader(file);
                 String line;
                 String firstLine = in.readLine();
                 FileWriter writer = new FileWriter(file,false);
@@ -108,5 +99,13 @@ public class DataService{
 
         }
     }
+    private BufferedReader getUtf8BuffReader(File file) throws UnsupportedEncodingException, FileNotFoundException {
+        return new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(file), "UTF8"));
+    }
 
+    private File getFile() throws IOException {
+        return new ClassPathResource(FILE_NAME).getFile();
+    }
 }

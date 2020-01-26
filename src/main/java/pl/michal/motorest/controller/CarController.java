@@ -9,7 +9,8 @@ import pl.michal.motorest.service.CarsService;
 import java.io.*;
 import java.util.*;
 
-@RestController("/cars/")
+@RestController()
+@RequestMapping("/cars/")
 public class CarController {
 
      private CarsService carsService;
@@ -19,25 +20,25 @@ public class CarController {
     }
 
     @GetMapping
-    public ResponseEntity<HashMap<Long,Cars>> getAll() throws IOException {
-         return new ResponseEntity<>(carsService.getAll(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public HashMap<Long,Cars> getAll() throws IOException {
+         return carsService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cars> getCarById(@PathVariable Long id) throws IOException {
-        Cars c = carsService.getById(id);
-        return new ResponseEntity<>(carsService.getById(id),
-                carsService.getById(id)==null?HttpStatus.NOT_FOUND:
-                HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Cars getCarById(@PathVariable Long id) throws IOException {
+        return carsService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Cars> addCar(@RequestBody Cars car){
-        return new ResponseEntity<>(carsService.add(car),
-                        HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public void addCar(@RequestBody Cars car){
+        carsService.add(car);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteCarById(@PathVariable Long id){
         carsService.removeById(id);
     }
